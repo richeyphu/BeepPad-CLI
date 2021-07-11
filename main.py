@@ -3,13 +3,17 @@ from math import log2, pow
 from time import sleep
 from threading import Thread
 
+__author__ = "AkaraSellegg"
+__license__ = "MIT"
+__version__ = "0.3b"
+__status__ = "Prototype"
+
 A4 = 440
 C0 = A4 * pow(2, -4.75)
 notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 
-# Music, Hertz, Barks
-def pitch(freq):
+def pitch(freq):  # Music, Hertz, Barks
     h = round(12 * log2(freq / C0))
     octave = h // 12
     n = h % 12
