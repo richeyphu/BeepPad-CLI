@@ -77,20 +77,22 @@ def showKeyboard():
 
 
 def getConfig():
-    check = True
-    while check:
+    while True:
         try:
-            du = int(input("Input duration (ms) : "))  # ms
+            du = int(input("Input duration (ms)      : "))  # ms
             if du > 0:
                 break
             else:
                 raise ValueError
         except ValueError:
             print("ERROR: Bad Value")
-    while check:
+    while True:
         try:
-            so = int(input("Input start octave  : "))
-            break
+            so = int(input("Input start octave (1-9) : "))
+            if 1 <= so <= 9:
+                break
+            else:
+                raise ValueError
         except ValueError:
             print("ERROR: Bad Value")
     return du, so
