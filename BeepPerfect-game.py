@@ -6,7 +6,7 @@ from time import sleep
 __author__ = "AkaraSellegg"
 __copyright__ = "Copyright 2019, BeepPad Project"
 __license__ = "MIT"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __maintainer__ = "AkaraSellegg"
 __status__ = "Prototype"
 
@@ -33,9 +33,9 @@ def gameStart():
     global score
     if ans.upper() == note:
         score += 1
-        print("Correct!\t>>[{}]<<".format(note))
+        print(">>Correct!\t    >>[{}]<<".format(note))
     else:
-        print("Try again...\t>>[{}]<<".format(note))
+        print(">>Try again...\t>>[{}]<<".format(note))
 
 
 def review():
@@ -50,7 +50,7 @@ def getDiff():
     print("Please select difficulty:")
     print("\t[E] Easy")
     print("\t[H] Hard")
-    return input("Enter difficulty : ").upper()
+    return "E" if input("Enter difficulty : ").upper() == "E" else "H"
 
 
 if __name__ == '__main__':
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     score = 0
     rounds = 5
     for i in range(1, rounds + 1):
-        print("ROUND #{}".format(i))
+        print(">>ROUND #{}".format(i))
         print()
         print("Get ready...", end="")
         for count in reversed(range(1, 4)):
@@ -80,5 +80,5 @@ if __name__ == '__main__':
 
     if score == rounds:
         print("\tCongratulations! You are BEEP PERFECT !!!")
-    print("Score: {}/{}".format(score, rounds))
+    print(">>Score: {}/{}".format(score, rounds))
     line2()
