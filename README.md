@@ -5,7 +5,7 @@
 - **Require:** `winsound` module
 
 ## Contents
-- `BeepPad.py` - BeepPad main program, a Windows Beep sound generator.
+- `BeepPad.py` - BeepPad main program, a Windows Beep sound generator into chromatic scale.
 - `BeepPerfect-game.py` - BeepPad minigame, a pitch guessing game.
 
 ## Extra
