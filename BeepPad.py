@@ -6,7 +6,7 @@ from threading import Thread
 __author__ = "AkaraSellegg"
 __copyright__ = "Copyright 2019, BeepPad Project"
 __license__ = "MIT"
-__version__ = "0.2.1"
+__version__ = "0.3.2"
 __maintainer__ = "AkaraSellegg"
 __status__ = "Prototype"
 
@@ -37,23 +37,34 @@ def getFrequency(note):
     return round(A4 * 2 ** ((keyNumber - 49) / 12))
 
 
-def getBeep(key, d=1000, oct=4):
+def getBeep(key, d=1000, oct=4, mode=1):
     keys = ['a', 'w', 's', 'e', 'd', 'f', 't', 'g', 'y', 'h', 'u', 'j', 'k', 'o', 'l', 'p', ';', "'"]
     print("Now playing\t:", end="")
-    for i in key:
-        try:
-            keyNum = keys.index(i)
-            if keyNum <= 11:
-                note = notes[keyNum] + str(oct)
-            else:
-                keyNum -= 12
-                note = notes[keyNum] + str(oct + 1)
-            print(" [{}]".format(note), end="")
-            Beep(getFrequency(note), d)
-        except ValueError:
-            print(" [  ]", end="")
-            sleep(d / 1000)
-            # print("Bad Key, please try again...")
+    if mode == "1":
+        for i in key:
+            try:
+                keyNum = keys.index(i)
+                if keyNum <= 11:
+                    note = notes[keyNum] + str(oct)
+                else:
+                    keyNum -= 12
+                    note = notes[keyNum] + str(oct + 1)
+                print(" [{}]".format(note), end="")
+                Beep(getFrequency(note), d)
+            except ValueError:
+                print(" [  ]", end="")
+                sleep(d / 1000)
+                # print("Bad Key, please try again...")
+    else:
+        for i in key.split(' '):
+            try:
+                i = i.upper() + ("" if len(i) == 3 else str(oct) if len(i) == 1 else str(oct) if len(i) == 2 else "")
+                freq = getFrequency(i)
+                print(" [{}]".format(i), end="")
+                Beep(freq, d)
+            except (ValueError, IndexError):
+                print(" [  ]", end="")
+                sleep(d / 1000)
     print()
 
 
@@ -77,6 +88,13 @@ def showKeyboard():
 
 
 def getConfig():
+    print("Please select mode:")
+    print(" [1] BeepPad (Default)")
+    print(" [2] Standard Notation [{Note}{Octave}]")
+    line()
+    mo = input("Input mode : ")
+    line()
+
     while True:
         try:
             du = int(input("Input duration (ms)      : "))  # ms
@@ -86,6 +104,7 @@ def getConfig():
                 raise ValueError
         except ValueError:
             print("ERROR: Bad Value")
+
     while True:
         try:
             so = int(input("Input start octave (1-9) : "))
@@ -95,7 +114,8 @@ def getConfig():
                 raise ValueError
         except ValueError:
             print("ERROR: Bad Value")
-    return du, so
+
+    return mo if mo == "1" or mo == "2" else "1", du, so
 
 
 def showHelp():
@@ -117,7 +137,7 @@ if __name__ == '__main__':
     showTitle()
 
     while True:
-        duration, start_oct = getConfig()
+        mode, duration, start_oct = getConfig()
 
         line()
         showKeyboard()
@@ -144,6 +164,9 @@ if __name__ == '__main__':
                 showHelp()
                 line()
             else:
-                getBeep(key, duration, start_oct)
-                # thr = Thread(target=getBeep, args=(key, duration, start_oct))
-                # thr.start()
+                if mode == "1":
+                    getBeep(key, duration, start_oct, mode=mode)
+                    # thr = Thread(target=getBeep, args=(key, duration, start_oct))
+                    # thr.start()
+                else:
+                    getBeep(key, duration, start_oct, mode=mode)
