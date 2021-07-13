@@ -39,23 +39,28 @@ def getFrequency(note):
 
 def getBeep(key, d=1000, oct=4):
     keys = ['a', 'w', 's', 'e', 'd', 'f', 't', 'g', 'y', 'h', 'u', 'j', 'k', 'o', 'l', 'p', ';', "'"]
+    print("Now playing\t:", end="")
     for i in key:
         try:
             keyNum = keys.index(i)
             if keyNum <= 11:
-                Beep(getFrequency(notes[keyNum] + str(oct)), d)
+                note = notes[keyNum] + str(oct)
             else:
                 keyNum -= 12
-                Beep(getFrequency(notes[keyNum] + str(oct + 1)), d)
+                note = notes[keyNum] + str(oct + 1)
+            print(" [{}]".format(note), end="")
+            Beep(getFrequency(note), d)
         except ValueError:
+            print(" [  ]", end="")
             sleep(d / 1000)
             # print("Bad Key, please try again...")
+    print()
 
 
 def showTitle():
-    print("=" * 50)
+    line2()
     print("\t\t   BeepPad CLI - Python Edition")
-    print("=" * 50)
+    line2()
 
 
 def showKeyboard():
@@ -63,28 +68,80 @@ def showKeyboard():
   _____________________________________________
   |  ███ ███  |  ███ ███ ███  |  ███ ███  |   |
   |  ███ ███  |  ███ ███ ███  |  ███ ███  |   |
-  |  █w█ █e█  |  █t█ █y█ █u█  |  █o█ █p█  |   |
   |  ███ ███  |  ███ ███ ███  |  ███ ███  |   |
+  |  █w█ █e█  |  █t█ █y█ █u█  |  █o█ █p█  |   |
   |   |   |   |   |   |   |   |   |   |   |   |
   | a | s | d | f | g | h | j | k | l | ; | ' |
   |___|___|___|___|___|___|___|___|___|___|___|"""
     print(keyboard)
 
 
+def getConfig():
+    check = True
+    while check:
+        try:
+            du = int(input("Input duration (ms) : "))  # ms
+            if du > 0:
+                break
+            else:
+                raise ValueError
+        except ValueError:
+            print("ERROR: Bad Value")
+    while check:
+        try:
+            so = int(input("Input start octave  : "))
+            break
+        except ValueError:
+            print("ERROR: Bad Value")
+    return du, so
+
+
+def showHelp():
+    print(" [help] Show all commands")
+    print(" [kb]   Show Keyboard")
+    print(" [r]    Restart")
+    print(" [exit] Exit")
+
+
+def line():
+    print("-" * 50)
+
+
+def line2():
+    print("=" * 50)
+
+
 if __name__ == '__main__':
     showTitle()
 
-    duration = int(input("Input duration (ms) : "))  # ms
-    start_oct = int(input("Input start octave  : "))
-
-    print("-" * 50)
-    showKeyboard()
-    print("-" * 50)
-
     while True:
-        key = input("Enter Key : ")
-        if key == "":
-            break
-        # getBeep(key, duration, start_oct)
-        thr = Thread(target=getBeep, args=(key, duration, start_oct))
-        thr.start()
+        duration, start_oct = getConfig()
+
+        line()
+        showKeyboard()
+        line()
+        showHelp()
+        line()
+
+        while True:
+            key = input("Enter Key\t: ").lower()
+            if key == "":
+                continue
+            elif key == "exit":
+                line2()
+                exit()
+            elif key == "r":
+                line2()
+                break
+            elif key == "kb":
+                line()
+                showKeyboard()
+                line()
+            elif key == "help":
+                line()
+                showHelp()
+                line()
+            else:
+                getBeep(key, duration, start_oct)
+                # thr = Thread(target=getBeep, args=(key, duration, start_oct))
+                # thr.start()
