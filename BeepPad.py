@@ -6,7 +6,7 @@ from threading import Thread
 __author__ = "AkaraSellegg"
 __copyright__ = "Copyright 2019, BeepPad Project"
 __license__ = "MIT"
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __maintainer__ = "AkaraSellegg"
 __status__ = "Prototype"
 
@@ -149,7 +149,7 @@ if __name__ == '__main__':
             key = input("Enter Key\t: ").lower()
             if key == "":
                 continue
-            elif key == "exit":
+            elif key == "exit" or key == "end":
                 line2()
                 exit()
             elif key == "r":
