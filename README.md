@@ -6,7 +6,7 @@
 
 ## Contents
 - `BeepPad.py` - BeepPad main program, a Windows Beep sound generator into chromatic scale.
-- `BeepPerfect-game.py` - BeepPad minigame, a pitch guessing game.
+- `BeepPerfect-game.py` - BeepPad minigame, a pitch guessing game, the road to BeepPerfect!
 
 ## Extra
 - For C# GUI version, please go here : [BeepPad-Project](https://github.com/richeyphu/BeepPad-Project/) (Legacy)
