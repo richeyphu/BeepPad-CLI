@@ -2,6 +2,7 @@
 **BeepPad CLI - Python Edition**
 
 - **Developing with** `Python 3.9`
+- **Require:** `winsound` module
 
 ## Contents
 - `BeepPad.py` - BeepPad main program, a Windows Beep sound generator.
