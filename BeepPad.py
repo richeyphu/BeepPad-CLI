@@ -58,7 +58,8 @@ def getBeep(key, d=1000, oct=4, mode=1):
     else:
         for i in key.split(' '):
             try:
-                i = i.upper() + ("" if len(i) == 3 else str(oct) if len(i) == 1 else str(oct) if len(i) == 2 else "")
+                i = i.upper() if i[-1].isdigit() else i.upper() + str(oct)
+
                 freq = getFrequency(i)
                 print(" [{}]".format(i), end="")
                 Beep(freq, d)
@@ -90,7 +91,7 @@ def showKeyboard():
 def getConfig():
     print("Please select mode:")
     print(" [1] BeepPad (Default)")
-    print(" [2] Standard Notation [{Note}{Octave}]")
+    print(" [2] Chromatic Notation [{Note}{Octave}]")
     line()
     mo = input("Input mode : ")
     line()
