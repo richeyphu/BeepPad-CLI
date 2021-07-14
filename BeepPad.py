@@ -6,7 +6,7 @@ from threading import Thread
 __author__ = "AkaraSellegg"
 __copyright__ = "Copyright 2019, BeepPad Project"
 __license__ = "MIT"
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 __maintainer__ = "AkaraSellegg"
 __status__ = "Prototype"
 
