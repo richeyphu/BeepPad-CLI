@@ -2,11 +2,12 @@ from random import randint
 from winsound import Beep
 from BeepPad import getPitch, getFrequency, notes, line, line2
 from time import sleep
+from threading import Thread
 
 __author__ = "AkaraSellegg"
 __copyright__ = "Copyright 2019, BeepPad Project"
 __license__ = "MIT"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __maintainer__ = "AkaraSellegg"
 __status__ = "Prototype"
 
@@ -25,7 +26,8 @@ def gameStart():
     freq = getFrequency(note + "4")
     dura = 3000
 
-    Beep(freq, dura)
+    Thread(target=playBeep, args=(freq, dura)).start()
+    sleep(1.5)
 
     print()
     ans = input("Enter your answer : ")
@@ -36,6 +38,10 @@ def gameStart():
         print(">>Correct!\t    >>[{}]<<".format(note))
     else:
         print(">>Try again...\t>>[{}]<<".format(note))
+
+
+def playBeep(f, d):
+    Beep(f, d)
 
 
 def review():
