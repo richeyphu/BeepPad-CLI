@@ -53,6 +53,8 @@ def review():
         note = i
         print(" [{}]".format(note), end="")
         Beep(getFrequency(note + "4"), 400)
+        # if diff == '3':
+        #     Beep(randint(getFrequency("D1"), getFrequency("B7")), 50)
     print()
 
 
