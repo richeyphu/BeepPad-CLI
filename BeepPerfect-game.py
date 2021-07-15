@@ -7,7 +7,7 @@ from threading import Thread
 __author__ = "AkaraSellegg"
 __copyright__ = "Copyright 2019, BeepPad Project"
 __license__ = "MIT"
-__version__ = "0.1.3"
+__version__ = "0.1.5"
 __maintainer__ = "AkaraSellegg"
 __status__ = "Prototype"
 
@@ -20,14 +20,14 @@ def showTitle():
 
 
 def gameStart():
-    print("Please listen...")
+    print("\rPlease listen...")
     if diff != '3':
         ran = (randint(0, 11) if diff == '2' else randint(0, 6))
         note = notes_set[ran]
         freq = getFrequency(note + "4")
     else:
         freq = randint(getFrequency("D1"), getFrequency("B7"))  # 37-3951 Hz
-        note = getPitch(freq)
+        note = getPitch(freq)[0: -1]
     dura = 3000
 
     Thread(target=playBeep, args=(freq, dura)).start()
@@ -68,28 +68,35 @@ def getDiff():
 if __name__ == '__main__':
     showTitle()
 
-    diff = getDiff()
+    while True:
+        diff = getDiff()
 
-    notes_set = [x for x in notes if len(x) == 1] if diff == "1" else notes
+        notes_set = [x for x in notes if len(x) == 1] if diff == "1" else notes
 
-    line()
-    review()
-    line()
+        line()
+        review()
+        line()
 
-    score = 0
-    rounds = 5
-    for i in range(1, rounds + 1):
-        print(">>ROUND #{}".format(i))
-        print()
-        for count in reversed(range(1, 4)):
-            print("\rGet ready... [{}]".format(count), end="")
-            sleep(1)
-        print("\rGet ready... [GO!]\n", end="")
+        score = 0
+        rounds = 5
+        for i in range(1, rounds + 1):
+            print(">>ROUND #{}".format(i))
+            print()
+            for count in reversed(range(1, 4)):
+                print("\rGet ready... [{}]".format(count), end="")
+                sleep(1)
+            # print("\rGet ready... [GO!]", end="")
 
-        gameStart()
-        line() if i < rounds else line2()
+            gameStart()
+            line() if i < rounds else line2()
 
-    if score == rounds:
-        print("\tCongratulations! You are BEEP PERFECT !!!")
-    print(">>Score: {}/{}".format(score, rounds))
-    line2()
+        if score == rounds:
+            print("\tCongratulations! You are BEEP PERFECT !!!")
+        print(">>Score: {}/{}".format(score, rounds))
+        line2()
+
+        if input("Play again? (Y/N) : ").upper() != 'Y':
+            print("\t\tThanks for playing, see you again!")
+            line()
+            exit()
+        line()
