@@ -3,11 +3,12 @@ from winsound import Beep
 from BeepPad import getPitch, getFrequency, notes, line, line2
 from time import sleep
 from threading import Thread
+from sys import maxsize
 
 __author__ = "AkaraSellegg"
 __copyright__ = "Copyright 2019, BeepPad Project"
 __license__ = "MIT"
-__version__ = "0.1.5"
+__version__ = "0.2.0"
 __maintainer__ = "AkaraSellegg"
 __status__ = "Prototype"
 
@@ -26,7 +27,7 @@ def gameStart():
         note = notes_set[ran]
         freq = getFrequency(note + "4")
     else:
-        freq = randint(getFrequency("D1"), getFrequency("B7"))  # 37-3951 Hz
+        freq = randint(getFrequency("C3"), getFrequency("B5"))  # 131-988 Hz
         note = getPitch(freq)[0: -1]
     dura = 3000
 
@@ -34,14 +35,26 @@ def gameStart():
     sleep(1.5)
 
     print()
-    ans = input("Enter your answer : ")
-    print()
-    global score
-    if ans.upper() == note:
-        score += 1
-        print(">>Correct!\t    >>[{}]<<".format(note))
-    else:
-        print(">>Try again...\t>>[{}]<<".format(note))
+    while True:
+        ans = input("Enter your answer : ").upper()
+        global score
+        if ans == note:
+            score += 1
+            print("\n>>Correct!\t    >>[{}]<<".format(note))
+            break
+        elif ans == 'R':
+            Thread(target=playBeep, args=(freq, dura)).start()
+        elif ans == 'Q':
+            line2()
+            print(">>RAGE QUIT [{}/{}]".format(score, rounds))
+            exit()
+        elif ans == 'H':
+            line()
+            showHelp()
+            line()
+        else:
+            print("\n>>Try again...\t>>[{}]<<".format(note))
+            break
 
 
 def playBeep(f, d):
@@ -53,8 +66,6 @@ def review():
         note = i
         print(" [{}]".format(note), end="")
         Beep(getFrequency(note + "4"), 400)
-        # if diff == '3':
-        #     Beep(randint(getFrequency("D1"), getFrequency("B7")), 50)
     print()
 
 
@@ -67,20 +78,32 @@ def getDiff():
     return '1' if ipt not in ('1', '2', '3') else ipt
 
 
+def getRound():
+    r = input("Enter rounds : ")
+    return int(r) if r.isdigit() and int(r) > 0 else maxsize
+
+
+def showHelp():
+    print("\t[H] Show help")
+    print("\t[R] Play beep again")
+    print("\t[Q] Rage quit")
+
+
 if __name__ == '__main__':
     showTitle()
 
     while True:
         diff = getDiff()
+        rounds = getRound()
+        line()
 
         notes_set = [x for x in notes if len(x) == 1] if diff == "1" else notes
-
-        line()
         review()
+        line()
+        showHelp()
         line()
 
         score = 0
-        rounds = 5
         for i in range(1, rounds + 1):
             print(">>ROUND #{}".format(i))
             print()
@@ -94,7 +117,7 @@ if __name__ == '__main__':
 
         if score == rounds:
             print("\tCongratulations! You are BEEP PERFECT !!!")
-        print(">>Score: {}/{}".format(score, rounds))
+        print(">>Score: {}/{} ({:.2f}%)".format(score, rounds, score / rounds * 100))
         line2()
 
         if input("Play again? (Y/N) : ").upper() != 'Y':
