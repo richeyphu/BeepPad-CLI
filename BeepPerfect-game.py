@@ -7,7 +7,7 @@ from threading import Thread
 __author__ = "AkaraSellegg"
 __copyright__ = "Copyright 2019, BeepPad Project"
 __license__ = "MIT"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __maintainer__ = "AkaraSellegg"
 __status__ = "Prototype"
 
@@ -21,9 +21,13 @@ def showTitle():
 
 def gameStart():
     print("Please listen...")
-    ran = randint(0, 11) if diff == "H" else randint(0, 6)
-    note = notes_set[ran]
-    freq = getFrequency(note + "4")
+    if diff != '3':
+        ran = (randint(0, 11) if diff == '2' else randint(0, 6))
+        note = notes_set[ran]
+        freq = getFrequency(note + "4")
+    else:
+        freq = randint(getFrequency("D1"), getFrequency("B7"))  # 37-3951 Hz
+        note = getPitch(freq)
     dura = 3000
 
     Thread(target=playBeep, args=(freq, dura)).start()
@@ -54,9 +58,11 @@ def review():
 
 def getDiff():
     print("Please select difficulty:")
-    print("\t[E] Easy")
-    print("\t[H] Hard")
-    return "E" if input("Enter difficulty : ").upper() == "E" else "H"
+    print("\t[1] Easy")
+    print("\t[2] Hard")
+    print("\t[3] Nightmare")
+    ipt = input("Enter difficulty : ")
+    return '1' if ipt not in ('1', '2', '3') else ipt
 
 
 if __name__ == '__main__':
@@ -64,7 +70,7 @@ if __name__ == '__main__':
 
     diff = getDiff()
 
-    notes_set = [x for x in notes if len(x) == 1] if diff == "E" else notes
+    notes_set = [x for x in notes if len(x) == 1] if diff == "1" else notes
 
     line()
     review()
@@ -75,11 +81,10 @@ if __name__ == '__main__':
     for i in range(1, rounds + 1):
         print(">>ROUND #{}".format(i))
         print()
-        print("Get ready...", end="")
         for count in reversed(range(1, 4)):
-            print(" {}".format(count), end="")
+            print("\rGet ready... [{}]".format(count), end="")
             sleep(1)
-        print()
+        print("\rGet ready... [GO!]\n", end="")
 
         gameStart()
         line() if i < rounds else line2()
