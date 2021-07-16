@@ -121,6 +121,7 @@ if __name__ == '__main__':
         line2()
 
         if input("Play again? (Y/N) : ").upper() != 'Y':
+            line()
             print("\t\tThanks for playing, see you again!")
             line()
             exit()
